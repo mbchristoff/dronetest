@@ -11,10 +11,10 @@ steps:
       - clone
     privileged: true
     settings:
-      repo: b2b.nextpertise.nl/nextpertise/michaelnginx
-      registry: http://b2b.nextpertise.nl:8080/
+      repo: registry.nextpertise.tools/nextpertise/michaelnginx
+      registry: registry.nextpertise.tools
       dockerfile: build/web/Dockerfile
-      pull_image: false
+      pull_image: true
       context: build/web/
       build_args:
         - tag=test1
@@ -34,7 +34,7 @@ steps:
       repo: registry.nextpertise.tools/nextpertise/michaelphp
       registry: registry.nextpertise.tools
       dockerfile: build/php/Dockerfile
-      pull_image: false
+      pull_image: true
       context: build/php/
       build_args:
         - tag=test1
@@ -44,5 +44,5 @@ steps:
         from_secret: platform_harbor_password
       tags:
         - test1
-#image_pull_secrets:
-#  - platform_harbor_pull_secrets
+image_pull_secrets:
+  - platform_harbor_pull_secrets
