@@ -11,8 +11,8 @@ steps:
       - clone
     privileged: true
     settings:
-      repo: registry.nextpertise.tools/nextpertise/michaelnginx
-      registry: registry.nextpertise.tools
+      repo: b2b.nextpertise.nl/nextpertise/michaelnginx
+      registry: http://b2b.nextpertise.nl:8080/
       dockerfile: build/web/Dockerfile
       pull_image: false
       context: build/web/
