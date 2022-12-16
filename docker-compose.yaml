@@ -1,0 +1,26 @@
+version: '3'
+services:
+    web:
+        image: registry.nextpertise.tools/nextpertise/michaelnginx:test1
+        container_name: web
+        restart: always
+        environment:
+            - TZ=Europe/Amsterdam
+        ports:
+            - "8080:80"
+        depends_on:
+            - php
+        networks:
+            - webserver
+    php:
+        image: registry.nextpertise.tools/nextpertise/michaelphp:test1
+        container_name: php
+        restart: always
+        environment:
+            - TZ=Europe/Amsterdam
+        expose:
+            - "9000"
+        networks:
+            - webserver
+networks:
+  webserver:

@@ -1,0 +1,39 @@
+# nginx
+  - name: build nginx:test1
+    image: plugins/docker
+    depends_on:
+      - clone
+    privileged: true
+    settings:
+      repo: registry.nextpertise.tools/mbchristoff/dronetest
+      registry: registry.nextpertise.tools
+      dockerfile: build/web/Dockerfile
+      pull_image: true
+      context: build/web/
+      build_args:
+        - tag=test1
+      username:
+        from_secret: platform_harbor_username
+      password:
+        from_secret: platform_harbor_password
+      tags:
+        - test1
+  - name: build php:test1
+    image: plugins/docker
+    depends_on:
+      - clone
+    privileged: true
+    settings:
+      repo: registry.nextpertise.tools/mbchristoff/dronetest
+      registry: registry.nextpertise.tools
+      dockerfile: build/php/Dockerfile
+      pull_image: true
+      context: build/php/
+      build_args:
+        - tag=test1
+      username:
+        from_secret: platform_harbor_username
+      password:
+        from_secret: platform_harbor_password
+      tags:
+        - test1
