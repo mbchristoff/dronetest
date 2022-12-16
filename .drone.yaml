@@ -11,8 +11,8 @@ steps:
       - clone
     privileged: true
     settings:
-      repo: registry.nextpertise.tools/nextpertise/dronetest
-      registry: http://registry.nextpertise.tools
+      repo: registry.nextpertise.tools/nextpertise/michaelnginx
+      registry: registry.nextpertise.tools
       dockerfile: build/web/Dockerfile
       pull_image: true
       context: build/web/
@@ -31,8 +31,8 @@ steps:
       - clone
     privileged: true
     settings:
-      repo: registry.nextpertise.tools/nextpertise/dronetest
-      registry: http://registry.nextpertise.tools
+      repo: registry.nextpertise.tools/nextpertise/michaelphp
+      registry: registry.nextpertise.tools
       dockerfile: build/php/Dockerfile
       pull_image: true
       context: build/php/
