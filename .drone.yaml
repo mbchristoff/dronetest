@@ -44,5 +44,5 @@ steps:
         from_secret: platform_harbor_password
       tags:
         - test1
-image_pull_secrets:
-  - platform_harbor_pull_secrets
+#image_pull_secrets:
+#  - platform_harbor_pull_secrets
