@@ -18,8 +18,10 @@ steps:
       context: build/web/
       build_args:
         - tag=test1
-      username: robot@michael.vps.nextpertise.nl
-      password: w65ZpzhL9rFhn2oD5QJksR8su6xqKK8e
+      username:
+        from_secret: platform_harbor_username
+      password:
+        from_secret: platform_harbor_password
       tags:
         - test1
 #php
