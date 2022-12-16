@@ -12,7 +12,7 @@ steps:
     privileged: true
     settings:
       repo: registry.nextpertise.tools/nextpertise/dronetest
-      registry: registry.nextpertise.tools
+      registry: http://registry.nextpertise.tools
       dockerfile: build/web/Dockerfile
       pull_image: true
       context: build/web/
@@ -32,7 +32,7 @@ steps:
     privileged: true
     settings:
       repo: registry.nextpertise.tools/nextpertise/dronetest
-      registry: registry.nextpertise.tools
+      registry: http://registry.nextpertise.tools
       dockerfile: build/php/Dockerfile
       pull_image: true
       context: build/php/
