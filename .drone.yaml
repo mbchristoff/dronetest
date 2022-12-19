@@ -63,7 +63,6 @@ steps:
       kubernetes_token:
         from_secret: rke_test_token
     commands:
-      - kubectl --insecure-skip-tls-verify=true create namespace dronetest1
       - kubectl --insecure-skip-tls-verify=true apply -f dronetest1.yaml
 
   - name: deploy to prod
@@ -76,7 +75,6 @@ steps:
       kubernetes_token:
         from_secret: rke_prod_token
     commands:
-      - kubectl --insecure-skip-tls-verify=true create namespace dronetest1
       - kubectl --insecure-skip-tls-verify=true apply -f dronetest1.yaml
     when:
         event:
