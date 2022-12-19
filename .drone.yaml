@@ -1,5 +1,5 @@
 ---
-name: build docker image
+name: image_building
 kind: pipeline
 type: docker
 
@@ -46,3 +46,25 @@ steps:
         - test1
 image_pull_secrets:
   - platform_harbor_pull_secrets
+
+---
+name: deployment
+kind: pipeline
+name: deploy
+
+steps:
+  - name: deploy
+    image: sinlead/drone-kubectl
+    settings:
+      kubernetes_server:
+        from_secret: rke_test_server
+      kubernetes_cert:
+        from_secret: rke_test_cert
+      kubernetes_token:
+        from_secret: rke_test_token
+    commands:
+      - kubectl apply -f dronetest1.yaml
+      - kubectl wait --for=condition=complete -f dronetest1.yaml
+
+depends_on:
+- image_building
