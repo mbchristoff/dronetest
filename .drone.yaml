@@ -63,8 +63,8 @@ steps:
       kubernetes_token:
         from_secret: rke_test_token
     commands:
-      - kubectl apply -f dronetest1.yaml
-      - kubectl wait --for=condition=complete -f dronetest1.yaml
+      - kubectl --insecure-skip-tls-verify=true apply -f dronetest1.yaml
+      - kubectl --insecure-skip-tls-verify=true wait --for=condition=complete -f dronetest1.yaml
 
 depends_on:
 - image_building
