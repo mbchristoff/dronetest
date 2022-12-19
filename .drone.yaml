@@ -50,10 +50,10 @@ image_pull_secrets:
 ---
 name: deployment
 kind: pipeline
-name: deploy to test
+name: deploy
 
 steps:
-  - name: deploy
+  - name: deploy to test
     image: sinlead/drone-kubectl
     settings:
       kubernetes_server:
@@ -65,17 +65,8 @@ steps:
     commands:
       - kubectl --insecure-skip-tls-verify=true create namespace dronetest1 --dry-run=client -o yaml | kubectl apply -f -
       - kubectl --insecure-skip-tls-verify=true apply -f dronetest1.yaml
-      - kubectl --insecure-skip-tls-verify=true wait --for=condition=complete -f dronetest1.yaml
 
-depends_on:
-- image_building
-
-name: deployment
-kind: pipeline
-name: deploy to prod
-
-steps:
-  - name: deploy
+  - name: deploy to prod
     image: sinlead/drone-kubectl
     settings:
       kubernetes_server:
@@ -87,12 +78,11 @@ steps:
     commands:
       - kubectl --insecure-skip-tls-verify=true create namespace dronetest1 --dry-run=client -o yaml | kubectl apply -f -
       - kubectl --insecure-skip-tls-verify=true apply -f dronetest1.yaml
-      - kubectl --insecure-skip-tls-verify=true wait --for=condition=complete -f dronetest1.yaml
-  when:
-      event:
-      - promote
-      target:
-      - production
+    when:
+        event:
+        - promote
+        target:
+        - production
 
 depends_on:
 - image_building
