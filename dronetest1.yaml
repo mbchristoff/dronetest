@@ -15,6 +15,7 @@ items:
     generation: 3
     labels:
       workload.user.cattle.io/workloadselector: apps.deployment-dronetest1-php
+      cattle.io/timestamp: "2022-12-19T16:00:07Z"
     name: php
     namespace: dronetest1
   spec:
@@ -63,6 +64,7 @@ items:
     generation: 5
     labels:
       workload.user.cattle.io/workloadselector: apps.deployment-dronetest1-web
+      cattle.io/timestamp: "2022-12-19T16:00:07Z"
     name: web
     namespace: dronetest1
   spec:
@@ -114,6 +116,7 @@ items:
       protocol: TCP
     selector:
       workload.user.cattle.io/workloadselector: apps.deployment-dronetest1-php
+      cattle.io/timestamp: "2022-12-19T16:00:07Z"
 - apiVersion: v1
   kind: Service
   metadata:
@@ -126,6 +129,7 @@ items:
       protocol: TCP
     selector:
       workload.user.cattle.io/workloadselector: apps.deployment-dronetest1-web
+      cattle.io/timestamp: "2022-12-19T16:00:07Z"
 kind: List
 
 

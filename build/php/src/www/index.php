@@ -1,4 +1,4 @@
 <?php
-echo "test1 run" . PHP_EOL;
+echo "test2 run" . PHP_EOL;
 echo gethostname();
 ?>
