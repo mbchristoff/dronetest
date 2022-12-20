@@ -24,7 +24,7 @@ steps:
       password:
         from_secret: platform_harbor_password
       tags:
-        - test1
+        - ${DRONE_BRANCH//\//-}-${DRONE_COMMIT_SHA:0:8}
 #php
   - name: build php:test1
     image: plugins/docker
@@ -44,7 +44,7 @@ steps:
       password:
         from_secret: platform_harbor_password
       tags:
-        - test1
+        - ${DRONE_BRANCH//\//-}-${DRONE_COMMIT_SHA:0:8}
 image_pull_secrets:
   - platform_harbor_pull_secrets
 
