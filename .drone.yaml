@@ -24,10 +24,17 @@ steps:
     depends_on:
       - clone
 
+
+volumes:
+- name: configs
+  host:
+    path: /var/lib/cache
+
 ---
 name: image_building
 kind: pipeline
 type: docker
+
 
 steps:
 # nginx
@@ -122,4 +129,5 @@ depends_on:
 
 volumes:
 - name: configs
-  temp: {}
+  host:
+    path: /tmp/build/
