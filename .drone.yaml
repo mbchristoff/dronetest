@@ -16,7 +16,6 @@ steps:
       registry: registry.nextpertise.tools
       dockerfile: build/web/Dockerfile
       pull_image: true
-      context: build/web/
       build_args:
         - tag=test1
       username:
@@ -36,7 +35,6 @@ steps:
       registry: registry.nextpertise.tools
       dockerfile: build/php/Dockerfile
       pull_image: true
-      context: build/php/
       build_args:
         - tag=test1
       username:

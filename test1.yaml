@@ -143,4 +143,4 @@ items:
           path: /
           pathType: Prefix
 
-kind: List    
+kind: List
