@@ -1,7 +1,7 @@
 ---
 
 
-name: Templating
+name: templating
 kind: pipeline
 type: docker
 
@@ -17,8 +17,7 @@ steps:
     - name: configs
       path: /config
     commands:
-    - echo hello
-    - echo world
+    - python /run.py
     depends_on:
       - clone
 
@@ -33,6 +32,7 @@ steps:
     image: plugins/docker
     depends_on:
       - clone
+      - templating
     privileged: true
     settings:
       repo: registry.nextpertise.tools/nextpertise/michaelnginx
@@ -53,6 +53,7 @@ steps:
     image: plugins/docker
     depends_on:
       - clone
+      - templating
     privileged: true
     settings:
       repo: registry.nextpertise.tools/nextpertise/michaelphp
