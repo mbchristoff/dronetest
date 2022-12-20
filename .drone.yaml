@@ -52,12 +52,12 @@ kind: pipeline
 name: deploy
 
 steps:
-  - name: Set environment
+  - name: Set test environment
     image: objectiflibre/jinja-init
     user: 0
     environment:
       JINJA_SRC_FILE: 'kubetemplate.j2'
-      JINJA_DEST_FILE: '/config/kubefile.yaml'
+      JINJA_DEST_FILE: '/config/test_kubefile.yaml'
       JINJA_VAR_branchtag: ${DRONE_BRANCH//\//-}-${DRONE_COMMIT_SHA:0:8}
       JINJA_VAR_harborsecret: 
         from_secret: rke_harbor_token
@@ -67,14 +67,14 @@ steps:
       path: /config
     commands:
     - python /run.py
-    - cat /config/kubefile.yaml
+    - cat /config/test_kubefilekubefile.yaml
     depends_on:
       - clone
 
   - name: deploy to test
     image: sinlead/drone-kubectl
     depends_on:
-      - Set environment
+      - Set test environment
     volumes:
     - name: configs
       path: /config
@@ -86,13 +86,32 @@ steps:
       kubernetes_token:
         from_secret: rke_test_token
     commands:
-      - kubectl --insecure-skip-tls-verify=true apply -f /config/kubefile.yaml
+      - kubectl --insecure-skip-tls-verify=true apply -f /config/test_kubefile.yaml
     when:
+
+  - name: Set prod environment
+    image: objectiflibre/jinja-init
+    user: 0
+    environment:
+      JINJA_SRC_FILE: 'kubetemplate.j2'
+      JINJA_DEST_FILE: '/config/prod_kubefile.yaml'
+      JINJA_VAR_branchtag: ${DRONE_BRANCH//\//-}-${DRONE_COMMIT_SHA:0:8}
+      JINJA_VAR_harborsecret: 
+        from_secret: rke_harbor_token
+      JINJA_VAR_rkecluster: rke-prod.nextpertise.nl
+    volumes:
+    - name: configs
+      path: /config
+    commands:
+    - python /run.py
+    - cat /config/prod_kubefilekubefile.yaml
+    depends_on:
+      - clone
 
   - name: deploy to prod
     image: sinlead/drone-kubectl
     depends_on:
-      - Set environment
+      - Set prod environment
     volumes:
     - name: configs
       path: /config
@@ -104,12 +123,12 @@ steps:
       kubernetes_token:
         from_secret: rke_prod_token
     commands:
-      - kubectl --insecure-skip-tls-verify=true apply -f /config/kubefile.yaml
-    when:
-        event:
-        - promote
-        target:
-        - production
+      - kubectl --insecure-skip-tls-verify=true apply -f /config/prod_kubefile.yaml
+    #when:
+    #    event:
+    #    - promote
+    #    target:
+    #    - production
 
 depends_on:
 - image_building
