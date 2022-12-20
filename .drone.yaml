@@ -70,6 +70,7 @@ steps:
     - touch /config/kubefile.yaml
     - ls /config
     - python /run.py
+    - ls /config
     depends_on:
       - clone
 
@@ -114,5 +115,5 @@ depends_on:
 
 volumes:
 - name: configs
-  temp:
-    medium: memory
+  host:
+    path: /tmp/build
