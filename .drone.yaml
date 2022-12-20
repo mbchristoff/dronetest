@@ -86,7 +86,7 @@ steps:
       kubernetes_token:
         from_secret: rke_test_token
     commands:
-      - kubectl --insecure-skip-tls-verify=true apply -f /test1.yaml
+      - kubectl --insecure-skip-tls-verify=true apply -f /config/kubefile.yaml
     when:
 
   - name: deploy to prod
