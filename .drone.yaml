@@ -66,16 +66,15 @@ steps:
     - name: configs
       path: /config
     commands:
-    - ls /config
-    - touch /config/kubefile.yaml
-    - ls /config
     - python /run.py
-    - ls /config
+    - cat /config/kubefile.yaml
     depends_on:
       - clone
 
   - name: deploy to test
     image: sinlead/drone-kubectl
+    depends_on:
+      - Set environment
     volumes:
     - name: configs
       path: /config
@@ -92,6 +91,8 @@ steps:
 
   - name: deploy to prod
     image: sinlead/drone-kubectl
+    depends_on:
+      - Set environment
     volumes:
     - name: configs
       path: /config
