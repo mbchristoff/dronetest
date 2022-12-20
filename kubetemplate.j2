@@ -14,9 +14,9 @@ items:
 ## Secret
 
 # Harbor Pull secret
--apiVersion: v1
+- apiVersion: v1
   data:
-    {{ harborsecret }}
+    .dockerconfigjson: {{ harborsecret }}
   kind: Secret
   metadata:
     annotations:
