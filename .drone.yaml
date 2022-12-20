@@ -1,36 +1,4 @@
 ---
-
-
-name: templating
-kind: pipeline
-type: docker
-
-steps:
-  - name: Set environment
-    image: objectiflibre/jinja-init
-    environment:
-      JINJA_SRC_FILE: 'kubetemplate.j2'
-      JINJA_DEST_FILE: '/config/kubefile.yaml'
-      JINJA_VAR_branchtag: test2
-      JINJA_VAR_rkecluster: rke-test.nextpertise.nl
-    volumes:
-    - name: configs
-      path: /config
-    commands:
-    - ls /config
-    - touch /config/kubefile.yaml
-    - ls /config
-    - python /run.py
-    depends_on:
-      - clone
-
-
-volumes:
-- name: configs
-  host:
-    path: /var/lib/cache
-
----
 name: image_building
 kind: pipeline
 type: docker
@@ -79,8 +47,6 @@ steps:
         - test1
 image_pull_secrets:
   - platform_harbor_pull_secrets
-depends_on:
-- templating
 
 ---
 name: deployment
@@ -88,6 +54,24 @@ kind: pipeline
 name: deploy
 
 steps:
+  - name: Set environment
+    image: objectiflibre/jinja-init
+    environment:
+      JINJA_SRC_FILE: 'kubetemplate.j2'
+      JINJA_DEST_FILE: '/config/kubefile.yaml'
+      JINJA_VAR_branchtag: test2
+      JINJA_VAR_rkecluster: rke-test.nextpertise.nl
+    volumes:
+    - name: configs
+      path: /config
+    commands:
+    - ls /config
+    - touch /config/kubefile.yaml
+    - ls /config
+    - python /run.py
+    depends_on:
+      - clone
+
   - name: deploy to test
     image: sinlead/drone-kubectl
     volumes:
@@ -129,5 +113,4 @@ depends_on:
 
 volumes:
 - name: configs
-  host:
-    path: /tmp/build/
+  temp: {}
