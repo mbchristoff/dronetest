@@ -1,4 +1,28 @@
 ---
+
+
+name: Templating
+kind: pipeline
+type: docker
+
+steps:
+  - name: Set environment
+    image: objectiflibre/jinja-init
+    environment:
+      JINJA_SRC_FILE: 'kubetemplate.j2'
+      JINJA_DEST_FILE: '/config/kubefile.yaml'
+      JINJA_VAR_branchtag: test2
+      JINJA_VAR_rkecluster: rke-test.nextpertise.nl
+    volumes:
+    - name: configs
+      path: /config
+    commands:
+    - echo hello
+    - echo world
+    depends_on:
+      - clone
+
+---
 name: image_building
 kind: pipeline
 type: docker
@@ -55,6 +79,9 @@ name: deploy
 steps:
   - name: deploy to test
     image: sinlead/drone-kubectl
+    volumes:
+    - name: configs
+      path: /config
     settings:
       kubernetes_server:
         from_secret: rke_test_server
@@ -63,10 +90,14 @@ steps:
       kubernetes_token:
         from_secret: rke_test_token
     commands:
-      - kubectl --insecure-skip-tls-verify=true apply -f dronetest1.yaml
+      - kubectl --insecure-skip-tls-verify=true apply -f /config/kubefile.yaml
+    when:
 
   - name: deploy to prod
     image: sinlead/drone-kubectl
+    volumes:
+    - name: configs
+      path: /config
     settings:
       kubernetes_server:
         from_secret: rke_prod_server
@@ -75,7 +106,7 @@ steps:
       kubernetes_token:
         from_secret: rke_prod_token
     commands:
-      - kubectl --insecure-skip-tls-verify=true apply -f dronetest1.yaml
+      - kubectl --insecure-skip-tls-verify=true apply -f /config/kubefile.yaml
     when:
         event:
         - promote
@@ -84,3 +115,7 @@ steps:
 
 depends_on:
 - image_building
+
+volumes:
+- name: configs
+  temp: {}

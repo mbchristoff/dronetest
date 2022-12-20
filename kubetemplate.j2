@@ -1,0 +1,145 @@
+apiVersion: v1
+items:
+# Namespace
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    creationTimestamp: null
+    name: {{ branchtag }}
+  spec: {}
+  status: {}
+
+## Deployments
+
+# Nginx deployment
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: {{ branchtag }}-nginx
+    name: nginx
+    namespace: {{ branchtag }}
+  spec:
+    replicas: 2
+    selector:
+      matchLabels:
+        app: {{ branchtag }}-nginx
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: {{ branchtag }}-nginx
+      spec:
+        containers:
+        - image: registry.nextpertise.tools/nextpertise/michaelnginx:{{ branchtag }}
+          name: nginx
+          resources: {}
+        imagePullSecrets:
+        - name: harbor
+        restartPolicy: Always
+  status: {}
+
+# PHP Deplyment
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: {{ branchtag }}-php
+    name: php
+    namespace: {{ branchtag }}
+  spec:
+    replicas: 3
+    selector:
+      matchLabels:
+        app: {{ branchtag }}-php
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: {{ branchtag }}-php
+      spec:
+        containers:
+        - image: registry.nextpertise.tools/nextpertise/michaelphp:{{ branchtag }}
+          name: php
+          resources: {}
+        imagePullSecrets:
+        - name: harbor
+        restartPolicy: Always
+  status: {}
+
+## Services
+
+# PHP ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: {{ branchtag }}-php
+    name: php
+    namespace: {{ branchtag }}
+  spec:
+    ports:
+    - port: 9000
+      protocol: TCP
+      targetPort: 9000
+    selector:
+      app: {{ branchtag }}-php
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+
+# Web Nodeport
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: {{ branchtag }}-nginx
+    name: web
+    namespace: {{ branchtag }}
+  spec:
+    ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+    selector:
+      app: {{ branchtag }}-nginx
+    type: NodePort
+  status:
+    loadBalancer: {}
+
+## Ingresses
+
+# Web Ingress
+- apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    name: {{ branchtag }}-nginx-ingress
+    namespace: {{ branchtag }}
+  spec:
+    ingressClassName: nginx
+    rules:
+    - host: {{ branchtag }}.{{ rkecluster }}
+        paths:
+        - backend:
+            service:
+              name: web
+              port:
+                number: 80
+          path: /
+          pathType: Prefix
+
+kind: List    
