@@ -17,6 +17,9 @@ steps:
     - name: configs
       path: /config
     commands:
+    - ls /config
+    - touch /config/kubefile.yaml
+    - ls /config
     - python /run.py
     depends_on:
       - clone
@@ -32,7 +35,6 @@ steps:
     image: plugins/docker
     depends_on:
       - clone
-      - templating
     privileged: true
     settings:
       repo: registry.nextpertise.tools/nextpertise/michaelnginx
@@ -53,7 +55,6 @@ steps:
     image: plugins/docker
     depends_on:
       - clone
-      - templating
     privileged: true
     settings:
       repo: registry.nextpertise.tools/nextpertise/michaelphp
@@ -71,6 +72,8 @@ steps:
         - test1
 image_pull_secrets:
   - platform_harbor_pull_secrets
+depends_on:
+- templating
 
 ---
 name: deployment
