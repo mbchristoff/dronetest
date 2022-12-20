@@ -60,7 +60,7 @@ steps:
     environment:
       JINJA_SRC_FILE: 'kubetemplate.j2'
       JINJA_DEST_FILE: '/config/kubefile.yaml'
-      JINJA_VAR_branchtag: test2
+      JINJA_VAR_branchtag: ${DRONE_BRANCH//\//-}-${DRONE_COMMIT_SHA:0:8}
       JINJA_VAR_harborsecret: 
         from_secret: rke_harbor_token
       JINJA_VAR_rkecluster: rke-test.nextpertise.nl
