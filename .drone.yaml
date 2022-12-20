@@ -66,9 +66,9 @@ steps:
     - name: configs
       path: /config
     commands:
-    - touch /config/test_kubefilekubefile.yaml
+    - touch /config/test_kubefile.yaml
     - python /run.py
-    - cat /config/test_kubefilekubefile.yaml
+    - cat /config/test_kubefile.yaml
     depends_on:
       - clone
 
@@ -104,9 +104,9 @@ steps:
     - name: configs
       path: /config
     commands:
-    - touch /config/prod_kubefilekubefile.yaml
+    - touch /config/prod_kubefile.yaml
     - python /run.py
-    - cat /config/prod_kubefilekubefile.yaml
+    - cat /config/prod_kubefile.yaml
     depends_on:
       - clone
 
