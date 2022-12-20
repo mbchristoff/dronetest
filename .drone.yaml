@@ -62,7 +62,7 @@ steps:
       JINJA_DEST_FILE: '/config/kubefile.yaml'
       JINJA_VAR_branchtag: test2
       JINJA_VAR_harborsecret: 
-        from_secret: platform_harbor_pull_secrets
+        from_secret: rke_harbor_token
       JINJA_VAR_rkecluster: rke-test.nextpertise.nl
     volumes:
     - name: configs

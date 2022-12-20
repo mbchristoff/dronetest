@@ -16,7 +16,7 @@ items:
 # Harbor Pull secret
 -apiVersion: v1
   data:
-    {{ rke_harbor_token }}
+    {{ harborsecret }}
   kind: Secret
   metadata:
     annotations:
