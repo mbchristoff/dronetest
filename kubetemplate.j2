@@ -20,7 +20,7 @@ items:
   kind: Secret
   metadata:
     labels:
-      gitcommithash: "${DRONE_COMMIT_SHA:0:8}"
+      gitcommithash: "{{ commithash }}"
     annotations:
       secret.user.cattle.io/secret: "true"
     name: harbor
@@ -35,7 +35,7 @@ items:
   metadata:
     creationTimestamp: null
     labels:
-      gitcommithash: "${DRONE_COMMIT_SHA:0:8}"
+      gitcommithash: "{{ commithash }}"
       app: {{ branchtag }}-nginx
     name: nginx
     namespace: {{ branchtag }}
@@ -106,7 +106,7 @@ items:
   metadata:
     creationTimestamp: null
     labels:
-      gitcommithash: "${DRONE_COMMIT_SHA:0:8}"
+      gitcommithash: "{{ commithash }}"
       app: {{ branchtag }}-php
     name: php
     namespace: {{ branchtag }}
@@ -127,7 +127,7 @@ items:
   metadata:
     creationTimestamp: null
     labels:
-      gitcommithash: "${DRONE_COMMIT_SHA:0:8}"
+      gitcommithash: "{{ commithash }}"
       app: {{ branchtag }}-nginx
     name: web
     namespace: {{ branchtag }}
@@ -148,8 +148,8 @@ items:
 - apiVersion: networking.k8s.io/v1
   kind: Ingress
   metadata:
-    labels:
-      gitcommithash: "${DRONE_COMMIT_SHA:0:8}"
+  labels:
+      gitcommithash: "{{ commithash }}"
     name: {{ branchtag }}-nginx-ingress
     namespace: {{ branchtag }}
   spec:
