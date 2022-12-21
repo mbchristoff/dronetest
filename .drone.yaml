@@ -75,10 +75,6 @@ steps:
     - cat /config/test_kubefile.yaml
     depends_on:
       - clone
-    when:
-        target:
-          exclude:
-            - production
 
   - name: deploy to test
     image: sinlead/drone-kubectl
@@ -96,11 +92,25 @@ steps:
         from_secret: rke_test_token
     commands:
       - kubectl --insecure-skip-tls-verify=true apply -f /config/test_kubefile.yaml
-    when:
-        target:
-          exclude:
-            - production
 
+when:
+   target:
+     exclude:
+     - production
+
+depends_on:
+- image_building
+
+volumes:
+- name: configs
+  temp: {}
+
+---
+name: deployment
+kind: pipeline
+name: deploy
+
+steps:
   - name: Set prod environment
     image: objectiflibre/jinja-init
     user: 0
@@ -119,11 +129,6 @@ steps:
     - cat /config/prod_kubefile.yaml
     depends_on:
       - clone
-    when:
-        event:
-        - promote
-        target:
-        - production
 
   - name: deploy to prod
     image: sinlead/drone-kubectl
@@ -141,14 +146,12 @@ steps:
         from_secret: rke_prod_token
     commands:
       - kubectl --insecure-skip-tls-verify=true apply -f /config/prod_kubefile.yaml
-    when:
-        event:
-        - promote
-        target:
-        - production
 
-depends_on:
-- image_building
+when:
+    event:
+    - promote
+    target:
+    - production
 
 volumes:
 - name: configs
