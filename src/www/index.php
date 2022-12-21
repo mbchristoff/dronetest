@@ -1,4 +1,4 @@
 <?php
-echo "test1 branch" . PHP_EOL;
+echo "My sweet application, hosted on:" . PHP_EOL;
 echo gethostname();
 ?>
