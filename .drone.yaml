@@ -124,8 +124,7 @@ steps:
       kubernetes_token:
         from_secret: rke_prod_token
     commands:
-      - env
-      - kubectl version
+      - kubectl --insecure-skip-tls-verify=true version
       - kubectl --insecure-skip-tls-verify=true apply -f /config/prod_kubefile.yaml
     #when:
     #    event:
