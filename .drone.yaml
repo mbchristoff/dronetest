@@ -52,41 +52,41 @@ kind: pipeline
 name: deploy
 
 steps:
-# - name: Set test environment
-#   image: objectiflibre/jinja-init
-#   user: 0
-#   environment:
-#     JINJA_SRC_FILE: 'kubetemplate.j2'
-#     JINJA_DEST_FILE: '/config/test_kubefile.yaml'
-#     JINJA_VAR_branchtag: ${DRONE_BRANCH//\//-}-${DRONE_COMMIT_SHA:0:8}
-#     JINJA_VAR_harborsecret: 
-#       from_secret: rke_harbor_token
-#     JINJA_VAR_rkecluster: rke-test.nextpertise.nl
-#   volumes:
-#   - name: configs
-#     path: /config
-#   commands:
-#   - python /run.py
-#   - cat /config/test_kubefile.yaml
-#   depends_on:
-#     - clone
-
- - name: deploy to test
-   image: sinlead/drone-kubectl
-   depends_on:
-     - Set test environment
-   volumes:
-   - name: configs
-     path: /config
-   settings:
-     kubernetes_server:
-       from_secret: rke_test_server
-     kubernetes_cert:
-       from_secret: rke_test_cert
-     kubernetes_token:
-       from_secret: rke_test_token
-   commands:
-     - kubectl --insecure-skip-tls-verify=true apply -f /config/test_kubefile.yaml
+#  - name: Set test environment
+#    image: objectiflibre/jinja-init
+#    user: 0
+#    environment:
+#      JINJA_SRC_FILE: 'kubetemplate.j2'
+#      JINJA_DEST_FILE: '/config/test_kubefile.yaml'
+#      JINJA_VAR_branchtag: ${DRONE_BRANCH//\//-}-${DRONE_COMMIT_SHA:0:8}
+#      JINJA_VAR_harborsecret: 
+#        from_secret: rke_harbor_token
+#      JINJA_VAR_rkecluster: rke-test.nextpertise.nl
+#    volumes:
+#    - name: configs
+#      path: /config
+#    commands:
+#    - python /run.py
+#    - cat /config/test_kubefile.yaml
+#    depends_on:
+#      - clone
+#
+#  - name: deploy to test
+#    image: sinlead/drone-kubectl
+#    depends_on:
+#      - Set test environment
+#    volumes:
+#    - name: configs
+#      path: /config
+#    settings:
+#      kubernetes_server:
+#        from_secret: rke_test_server
+#      kubernetes_cert:
+#        from_secret: rke_test_cert
+#      kubernetes_token:
+#        from_secret: rke_test_token
+#    commands:
+#      - kubectl --insecure-skip-tls-verify=true apply -f /config/test_kubefile.yaml
 
   - name: Set prod environment
     image: objectiflibre/jinja-init
@@ -123,8 +123,8 @@ steps:
         from_secret: rke_prod_token
     commands:
       #- kubectl --insecure-skip-tls-verify=true apply -f /config/prod_kubefile.yaml
-      - kubectl --insecure-skip-tls-verify=true get nodes
-      - kubectl --insecure-skip-tls-verify=true version
+      - kubectl get nodes
+      - kubectl version
     #when:
     #    event:
     #    - promote
