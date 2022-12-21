@@ -52,7 +52,7 @@ when:
         - promote
 
 ---
-name: deployment
+name: test deployment
 kind: pipeline
 name: deploy
 
@@ -106,7 +106,7 @@ volumes:
   temp: {}
 
 ---
-name: deployment
+name: prod deployment
 kind: pipeline
 name: deploy
 
