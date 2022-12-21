@@ -24,6 +24,11 @@ steps:
         from_secret: platform_harbor_password
       tags:
         - ${DRONE_BRANCH//\//-}
+      when:
+          event:
+            exclude:
+            - promote
+
 #php
   - name: build php:${DRONE_BRANCH//\//-}
     image: plugins/docker
@@ -43,13 +48,12 @@ steps:
         from_secret: platform_harbor_password
       tags:
         - ${DRONE_BRANCH//\//-}
+      when:
+          event:
+            exclude:
+            - promote
 image_pull_secrets:
   - platform_harbor_pull_secrets
-
-when:
-    event:
-      exclude:
-        - promote
 
 ---
 name: deploy_to_test
@@ -74,6 +78,10 @@ steps:
     - cat /config/test_kubefile.yaml
     depends_on:
       - clone
+    when:
+       target:
+         exclude:
+         - production
 
   - name: deploy to test
     image: sinlead/drone-kubectl
@@ -91,11 +99,10 @@ steps:
         from_secret: rke_test_token
     commands:
       - kubectl --insecure-skip-tls-verify=true apply -f /config/test_kubefile.yaml
-
-when:
-   target:
-     exclude:
-     - production
+    when:
+       target:
+         exclude:
+         - production
 
 depends_on:
 - image_building
@@ -127,6 +134,11 @@ steps:
     - cat /config/prod_kubefile.yaml
     depends_on:
       - clone
+    when:
+        event:
+        - promote
+        target:
+        - production
 
   - name: deploy to prod
     image: sinlead/drone-kubectl
@@ -144,12 +156,11 @@ steps:
         from_secret: rke_prod_token
     commands:
       - kubectl --insecure-skip-tls-verify=true apply -f /config/prod_kubefile.yaml
-
-when:
-    event:
-    - promote
-    target:
-    - production
+    when:
+        event:
+        - promote
+        target:
+        - production
 
 volumes:
 - name: configs
