@@ -51,7 +51,7 @@ name: deployment
 kind: pipeline
 name: deploy
 
-#teps:
+steps:
 # - name: Set test environment
 #   image: objectiflibre/jinja-init
 #   user: 0
