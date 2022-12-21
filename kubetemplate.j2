@@ -23,6 +23,7 @@ items:
       gitcommithash: "{{ commithash }}"
     annotations:
       secret.user.cattle.io/secret: "true"
+      gitcommithash: "{{ commithash }}"
     name: harbor
     namespace: {{ branchtag }}
   type: kubernetes.io/dockerconfigjson
@@ -37,6 +38,8 @@ items:
     labels:
       gitcommithash: "{{ commithash }}"
       app: {{ branchtag }}-nginx
+    annotations:
+      githash: "{{ commithash }}"
     name: nginx
     namespace: {{ branchtag }}
   spec:
@@ -64,13 +67,15 @@ items:
         restartPolicy: Always
   status: {}
 
-# PHP eployment
+# PHP Deployment
 - apiVersion: apps/v1
   kind: Deployment
   metadata:
     creationTimestamp: null
     labels:
       app: {{ branchtag }}-php
+    annotations:
+      githash: "{{ commithash }}"
     name: php
     namespace: {{ branchtag }}
   spec:
