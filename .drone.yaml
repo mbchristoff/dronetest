@@ -52,9 +52,8 @@ when:
         - promote
 
 ---
-name: test deployment
+name: deploy_to_prod
 kind: pipeline
-name: deploy
 
 steps:
   - name: Set test environment
@@ -106,9 +105,8 @@ volumes:
   temp: {}
 
 ---
-name: prod deployment
+name: deploy_to_prod
 kind: pipeline
-name: deploy
 
 steps:
   - name: Set prod environment
@@ -130,7 +128,7 @@ steps:
     depends_on:
       - clone
 
-  - name: deploy to prod
+  - name: deploy_to_prod
     image: sinlead/drone-kubectl
     depends_on:
       - Set prod environment
