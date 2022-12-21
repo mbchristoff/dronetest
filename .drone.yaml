@@ -24,10 +24,10 @@ steps:
         from_secret: platform_harbor_password
       tags:
         - ${DRONE_BRANCH//\//-}
-      when:
-         target:
-           exclude:
-           - production
+    when:
+      target:
+        exclude:
+        - production
 
 #php
   - name: build php:${DRONE_BRANCH//\//-}
@@ -48,11 +48,11 @@ steps:
         from_secret: platform_harbor_password
       tags:
         - ${DRONE_BRANCH//\//-}
-      when:
-         target:
-           exclude:
-           - production
-           
+    when:
+      target:
+        exclude:
+        - production
+
 image_pull_secrets:
   - platform_harbor_pull_secrets
 
