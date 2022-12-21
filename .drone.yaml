@@ -76,8 +76,6 @@ steps:
     commands:
     - python /run.py
     - cat /config/test_kubefile.yaml
-    depends_on:
-      - clone
     when:
        target:
          exclude:
@@ -132,8 +130,6 @@ steps:
     commands:
     - python /run.py
     - cat /config/prod_kubefile.yaml
-    depends_on:
-      - clone
     when:
         event:
         - promote
