@@ -113,7 +113,7 @@ steps:
       JINJA_SRC_FILE: 'kubetemplate.j2'
       JINJA_DEST_FILE: '/config/prod_kubefile.yaml'
       JINJA_VAR_branchtag: ${DRONE_BRANCH//\//-}
-      JINJA_VAR_commithash: ${DRONE_COMMIT_SHA}
+      JINJA_VAR_commithash: ${DRONE_COMMIT_SHA:0:8}
       JINJA_VAR_harborsecret: 
         from_secret: rke_harbor_token
       JINJA_VAR_rkecluster: rke-prod.nextpertise.nl
