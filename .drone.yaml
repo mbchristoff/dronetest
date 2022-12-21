@@ -52,7 +52,7 @@ when:
         - promote
 
 ---
-name: deploy_to_prod
+name: deploy_to_test
 kind: pipeline
 
 steps:
@@ -128,7 +128,7 @@ steps:
     depends_on:
       - clone
 
-  - name: deploy_to_prod
+  - name: deploy to prod
     image: sinlead/drone-kubectl
     depends_on:
       - Set prod environment
