@@ -25,9 +25,9 @@ steps:
       tags:
         - ${DRONE_BRANCH//\//-}
       when:
-          event:
-            exclude:
-            - promote
+         target:
+           exclude:
+           - production
 
 #php
   - name: build php:${DRONE_BRANCH//\//-}
@@ -49,9 +49,10 @@ steps:
       tags:
         - ${DRONE_BRANCH//\//-}
       when:
-          event:
-            exclude:
-            - promote
+         target:
+           exclude:
+           - production
+           
 image_pull_secrets:
   - platform_harbor_pull_secrets
 
