@@ -56,10 +56,12 @@ image_pull_secrets:
   - platform_harbor_pull_secrets
 
 ---
-name: deploy_to_test
+name: deploy
 kind: pipeline
 
 steps:
+
+# Test
   - name: Set test environment
     image: objectiflibre/jinja-init
     user: 0
@@ -102,18 +104,7 @@ steps:
          exclude:
          - production
 
-depends_on:
-- image_building
-
-volumes:
-- name: configs
-  temp: {}
-
----
-name: deploy_to_prod
-kind: pipeline
-
-steps:
+# Prod
   - name: Set prod environment
     image: objectiflibre/jinja-init
     user: 0
@@ -157,6 +148,10 @@ steps:
         - promote
         target:
         - production
+
+
+depends_on:
+- image_building
 
 volumes:
 - name: configs
