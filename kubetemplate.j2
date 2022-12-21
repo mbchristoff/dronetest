@@ -38,8 +38,6 @@ items:
     labels:
       gitcommithash: "{{ commithash }}"
       app: {{ branchtag }}-nginx
-    annotations:
-      githash: "{{ commithash }}"
     name: nginx
     namespace: {{ branchtag }}
   spec:
@@ -62,6 +60,9 @@ items:
         - image: registry.nextpertise.tools/nextpertise/michaelnginx:{{ branchtag }}
           name: nginx
           resources: {}
+          env:
+          - name: GITCOMMIT
+            value: "{{ branchtag }}-{{ commithash }}"
         imagePullSecrets:
         - name: harbor
         restartPolicy: Always
@@ -74,8 +75,6 @@ items:
     creationTimestamp: null
     labels:
       app: {{ branchtag }}-php
-    annotations:
-      githash: "{{ commithash }}"
     name: php
     namespace: {{ branchtag }}
   spec:
@@ -98,6 +97,9 @@ items:
         - image: registry.nextpertise.tools/nextpertise/michaelphp:{{ branchtag }}
           name: php
           resources: {}
+          env:
+          - name: GITCOMMIT
+            value: "{{ branchtag }}-{{ commithash }}"
         imagePullSecrets:
         - name: harbor
         restartPolicy: Always
