@@ -6,7 +6,7 @@ type: docker
 
 steps:
 # nginx
-  - name: build nginx:test1
+  - name: build nginx:${DRONE_BRANCH//\//-}
     image: plugins/docker
     depends_on:
       - clone
@@ -17,15 +17,15 @@ steps:
       dockerfile: build/web/Dockerfile
       pull_image: true
       build_args:
-        - tag=test1
+        - tag=${DRONE_BRANCH//\//-}
       username:
         from_secret: platform_harbor_username
       password:
         from_secret: platform_harbor_password
       tags:
-        - ${DRONE_BRANCH//\//-}-${DRONE_COMMIT_SHA:0:8}
+        - ${DRONE_BRANCH//\//-}
 #php
-  - name: build php:test1
+  - name: build php:${DRONE_BRANCH//\//-}
     image: plugins/docker
     depends_on:
       - clone
@@ -36,15 +36,20 @@ steps:
       dockerfile: build/php/Dockerfile
       pull_image: true
       build_args:
-        - tag=test1
+        - tag=${DRONE_BRANCH//\//-}
       username:
         from_secret: platform_harbor_username
       password:
         from_secret: platform_harbor_password
       tags:
-        - ${DRONE_BRANCH//\//-}-${DRONE_COMMIT_SHA:0:8}
+        - ${DRONE_BRANCH//\//-}
 image_pull_secrets:
   - platform_harbor_pull_secrets
+
+when:
+    event:
+      exclude:
+        - promote
 
 ---
 name: deployment
@@ -58,7 +63,7 @@ steps:
     environment:
       JINJA_SRC_FILE: 'kubetemplate.j2'
       JINJA_DEST_FILE: '/config/test_kubefile.yaml'
-      JINJA_VAR_branchtag: ${DRONE_BRANCH//\//-}-${DRONE_COMMIT_SHA:0:8}
+      JINJA_VAR_branchtag: ${DRONE_BRANCH//\//-}
       JINJA_VAR_harborsecret: 
         from_secret: rke_harbor_token
       JINJA_VAR_rkecluster: rke-test.nextpertise.nl
@@ -70,6 +75,10 @@ steps:
     - cat /config/test_kubefile.yaml
     depends_on:
       - clone
+    when:
+        target:
+          exclude:
+            - production
 
   - name: deploy to test
     image: sinlead/drone-kubectl
@@ -88,6 +97,9 @@ steps:
     commands:
       - kubectl --insecure-skip-tls-verify=true apply -f /config/test_kubefile.yaml
     when:
+        target:
+          exclude:
+            - production
 
   - name: Set prod environment
     image: objectiflibre/jinja-init
@@ -95,7 +107,7 @@ steps:
     environment:
       JINJA_SRC_FILE: 'kubetemplate.j2'
       JINJA_DEST_FILE: '/config/prod_kubefile.yaml'
-      JINJA_VAR_branchtag: ${DRONE_BRANCH//\//-}-${DRONE_COMMIT_SHA:0:8}
+      JINJA_VAR_branchtag: ${DRONE_BRANCH//\//-}
       JINJA_VAR_harborsecret: 
         from_secret: rke_harbor_token
       JINJA_VAR_rkecluster: rke-prod.nextpertise.nl
@@ -107,6 +119,11 @@ steps:
     - cat /config/prod_kubefile.yaml
     depends_on:
       - clone
+    when:
+        event:
+        - promote
+        target:
+        - production
 
   - name: deploy to prod
     image: sinlead/drone-kubectl
