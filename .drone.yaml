@@ -127,6 +127,9 @@ steps:
         - promote
         target:
         - production
+        branch:
+        - main
+        - master
 
   - name: deploy to prod
     image: sinlead/drone-kubectl
@@ -149,7 +152,9 @@ steps:
         - promote
         target:
         - production
-
+        branch:
+        - main
+        - master
 
 depends_on:
 - image_building
