@@ -159,8 +159,8 @@ steps:
         from_secret: rke_prod_cert
       kubernetes_token:
         from_secret: rke_prod_token
-    commands: >
-      authorized_deploy_users=teunis90 && [[ $authorized_deploy_users =~ (^|[[:space:]])"${DRONE_BUILD_TRIGGER}"($|[[:space:]]) ]] && (echo "${DRONE_BUILD_TRIGGER} is authorized to deploy to production"' kubectl --insecure-skip-tls-verify=true apply -f /config/prod_kubefile.yaml') || (echo "${DRONE_BUILD_TRIGGER} is not authorized to deploy to production"; exit 1)
+    commands:
+      - authorized_deploy_users=teunis90 && [[ $authorized_deploy_users =~ (^|[[:space:]])"${DRONE_BUILD_TRIGGER}"($|[[:space:]]) ]] && (echo "${DRONE_BUILD_TRIGGER} is authorized to deploy to production"' kubectl --insecure-skip-tls-verify=true apply -f /config/prod_kubefile.yaml') || (echo "${DRONE_BUILD_TRIGGER} is not authorized to deploy to production"; exit 1)
     when:
         event:
         - promote
