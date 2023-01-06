@@ -104,6 +104,21 @@ steps:
          - production
 
 # Prod
+  - name: Fail when not master
+    image: alpine
+    commands:
+    - echo hello
+    - exit 1 # force failure
+    when:
+        event:
+        - promote
+        target:
+        - production
+        branch:
+          exclude:
+          - main
+          - master
+
   - name: Set prod environment
     image: objectiflibre/jinja-init
     user: 0
