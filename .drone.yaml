@@ -61,7 +61,7 @@ steps:
 
 # Test
   - name: Set test environment
-    image: objectiflibre/jinja-init
+    image: registry.nextpertise.tools/nextpertise-proxy/objectiflibre/jinja-init
     user: 0
     environment:
       JINJA_SRC_FILE: 'kubetemplate.j2'
@@ -75,6 +75,7 @@ steps:
     - name: configs
       path: /config
     commands:
+    - sleep 3600
     - python /run.py
     - cat /config/test_kubefile.yaml
     when:
@@ -83,7 +84,7 @@ steps:
          - production
 
   - name: deploy to test
-    image: sinlead/drone-kubectl
+    image: registry.nextpertise.tools/nextpertise-proxy/sinlead/drone-kubectl
     depends_on:
       - Set test environment
     volumes:
