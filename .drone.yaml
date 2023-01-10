@@ -10,7 +10,7 @@ steps:
     image: plugins/docker
     depends_on:
       - clone
-    privileged: true
+    #privileged: true
     settings:
       repo: registry.nextpertise.tools/nextpertise/michaelnginx
       registry: registry.nextpertise.tools
@@ -30,7 +30,7 @@ steps:
     image: plugins/docker
     depends_on:
       - clone
-    privileged: true
+    #privileged: true
     settings:
       repo: registry.nextpertise.tools/nextpertise/michaelphp
       registry: registry.nextpertise.tools
